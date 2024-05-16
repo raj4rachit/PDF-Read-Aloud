@@ -99,16 +99,17 @@ class TTSController extends Controller
 
     private function streamAudio($audioPath)
     {
-        $stream = function () use ($audioPath) {
-            $this->stream = Storage::disk('public')->readStream($audioPath);
-            fpassthru($this->stream );
-            if (is_resource($this->stream )) {
-                fclose($this->stream );
-            }
-        };
+//        $stream = function () use ($audioPath) {
+//            $this->stream = Storage::disk('public')->readStream($audioPath);
+//            fpassthru($this->stream );
+//            if (is_resource($this->stream )) {
+//                fclose($this->stream );
+//            }
+//        };
 
-        return response()->stream(function ($stream) {
-            fpassthru($stream);
+        $this->stream = Storage::disk('public')->readStream($audioPath);
+        return response()->stream(function () {
+            fpassthru($this->stream);
         }, 200, [
             'Content-Type' => 'audio/mpeg',
             'Content-Disposition' => 'inline; filename="'.$audioPath.'"'
