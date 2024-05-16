@@ -85,6 +85,10 @@
     <button onclick="pauseReadOut()" id="pause" class="btn btn-warning hide">Pause</button>
     <button onclick="playReadOut()" id="play" class="btn btn-success hide">Play</button>
     <button onclick="stopReadOut()" id="stop" class="btn btn-danger hide">Stop</button>
+
+    <input type="range" id="speedSlider" min="0.5" max="5.0" step="0.1" value="1.0" onchange="changeSpeed(this.value)">
+    <label for="speedSlider">Playback Speed</label>
+    <span id="speedValue">1.0x</span>
     <div id="loader" class="hide">Loading...</div>
 </div>
     <div class="audio-controls">
@@ -98,6 +102,14 @@
 </main>
 <footer>
 <script>
+
+//    if (window.audioPlayer && window.audioPlayer.audio) {
+//        const audio = document.getElementById('audioPlayer');
+//        audio.addEventListener('ended', function() {
+//            stopReadOut();
+//        });
+//    }
+
     function startReadOut() {
         const loader = document.getElementById('loader');
         loader.style.display = 'block';
@@ -127,6 +139,11 @@
             });
     }
 
+    if (window.audioPlayer && window.audioPlayer.audio) {
+        window.audioPlayer.audio.addEventListener('ended', function () {
+            stopReadOut();
+        });
+    }
     function pauseReadOut() {
         if (window.audioPlayer && window.audioPlayer.audio) {
             window.audioPlayer.audio.pause();
@@ -143,11 +160,18 @@
         }
     }
 
+    function changeSpeed(speed) {
+        if (window.audioPlayer && window.audioPlayer.audio) {
+            window.audioPlayer.audio.playbackRate = speed;
+            document.getElementById('speedValue').textContent = speed + 'x';
+        }
+    }
+
     function stopReadOut() {
         if (window.audioPlayer && window.audioPlayer.audio) {
-            const audio = window.audioPlayer.audio;
-            audio.pause();
-            audio.currentTime = 0;
+            //const audio = document.getElementById('audioPlayer');
+            window.audioPlayer.audio.pause();
+            window.audioPlayer.audio.currentTime = 0;
             document.getElementById('stop').style.display = 'none';
             document.getElementById('read').style.display = 'inline-block';
             document.getElementById('pause').style.display = 'none';
