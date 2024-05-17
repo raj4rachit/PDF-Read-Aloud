@@ -24,6 +24,31 @@ Next, please add these keys to your `.env` file:
 GOOGLE_APPLICATION_CREDENTIALS="Path to your google cloud application credential json file"
 ```
 
+Download ffmpeg.exe for windows from this URL (https://phoenixnap.com/kb/ffmpeg-windows)
+
+For linux using the following command:
+
+```
+sudo apt-get install ffmpeg
+```
+
+please add these ffempg.exe file path to your `.env` file:
+
+```env
+FFMPEG_PATH="Path to your ffepeg.exe file"
+```
+
+After change command in TTSController.php file on line# 144
+
+```
+// For windows
+$ffmpegPath = env('FFMPEG_PATH');; //storage_path('app/public/ffmpeg.exe');
+$command = "\"$ffmpegPath\" -y -f concat -safe 0 -i " . escapeshellarg($concatFile) . " -c copy " . escapeshellarg($outputPath);
+
+// For Linux
+//$command = 'ffmpeg -y -f concat -safe 0 -i ' . escapeshellarg($concatFile) . ' -c copy ' . escapeshellarg($outputPath);
+```
+
 Authentication Please see our <a href="https://github.com/googleapis/google-cloud-php/blob/main/AUTHENTICATION.md">Authentication guide</a> for more information on authenticating your client.
 
 ## 📄 License

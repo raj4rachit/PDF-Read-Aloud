@@ -17,6 +17,7 @@ class PDFController extends Controller
 
     public function upload(Request $request)
     {
+		try{
         $request->validate(['pdf' => 'required|mimes:pdf|max:10000']);
         $file = $request->file('pdf');
 
@@ -31,6 +32,9 @@ class PDFController extends Controller
 
         $pdf = PDF::create(['path' => $publicPath, 'content' => $content]);
         return redirect()->route('pdf.show', $pdf->id);
+		}catch (\Exception $e){
+			return response()->json(['error' => 'PDF file is large. Try to upload small file'], 404);
+		}
     }
 
     public function show($id)
